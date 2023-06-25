@@ -15,6 +15,7 @@
 		025C588F2A4499EA00A0D55B /* ShapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025C588E2A4499EA00A0D55B /* ShapesUITests.swift */; };
 		025C58912A4499EA00A0D55B /* ShapesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025C58902A4499EA00A0D55B /* ShapesUITestsLaunchTests.swift */; };
 		025EA4692A46F03A00003A5B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 025EA4682A46F03A00003A5B /* README.md */; };
+		02790E942A4884E6008973F9 /* mobile-code-challenge.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 02790E932A4884E6008973F9 /* mobile-code-challenge.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		025C588E2A4499EA00A0D55B /* ShapesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesUITests.swift; sourceTree = "<group>"; };
 		025C58902A4499EA00A0D55B /* ShapesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		025EA4682A46F03A00003A5B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		02790E932A4884E6008973F9 /* mobile-code-challenge.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "mobile-code-challenge.pdf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				025EA4682A46F03A00003A5B /* README.md */,
+				02790E932A4884E6008973F9 /* mobile-code-challenge.pdf */,
 				025C58722A4499E900A0D55B /* Shapes */,
 				025C58832A4499EA00A0D55B /* ShapesTests */,
 				025C588D2A4499EA00A0D55B /* ShapesUITests */,
@@ -235,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				025EA4692A46F03A00003A5B /* README.md in Resources */,
+				02790E942A4884E6008973F9 /* mobile-code-challenge.pdf in Resources */,
 				025C587B2A4499EA00A0D55B /* Preview Assets.xcassets in Resources */,
 				025C58782A4499EA00A0D55B /* Assets.xcassets in Resources */,
 			);
