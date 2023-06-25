@@ -22,7 +22,7 @@ This is a Shape Editor application built using SwiftUI. The application serves a
 
 ## Usage
 
-1. Run the application or preciew ContentView.
+1. Run the application or preview ContentView.
 2. Tap on the canvas to add a shape at the tapped location. By default, it will be a random shape.
 3. To select a shape and access its properties, tap on the shape.
 4. The Edit Shape Menu will appear, allowing you to modify the selected shape's properties.
