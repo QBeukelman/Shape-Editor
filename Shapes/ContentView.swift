@@ -9,10 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var shapes: [Shape] = []
-    @State private var selectedShapeType: ShapeType = .ellipse
-    @State var g_tapLocation: CGPoint = .zero
-    
+    @StateObject private var viewModel = ViewModel()
     
     var body: some View {
         
@@ -20,21 +17,14 @@ struct ContentView: View {
         
         // MARK: - Add shape
             .onTapGesture { tapLocation in
-                g_tapLocation = tapLocation
-                // Deselect all shapes when a new shape is added
-                shapes.indices.forEach {
-                    shapes[$0].isSelected = false
-                    shapes[$0].shadowColor = Color.clear
-                }
-                let shape = Shape.randomShape(at: tapLocation)
-                shapes.append(shape)
+                viewModel.addNewShape(tapLocation: tapLocation)
             }
     }
     
     
     // MARK: - Edit Shape Menu
     func renderMenu() -> some View {
-        if let selectedShape = shapes.first(where: { $0.isSelected }) {
+        if let selectedShape = viewModel.shapes.first(where: { $0.isSelected }) {
             return AnyView(
                 VStack(spacing: 20) {
                     
@@ -43,9 +33,9 @@ struct ContentView: View {
                     addSizeSlider(selectedShape: selectedShape)
                     
                     Button("Done") {
-                        shapes.indices.forEach {
-                            shapes[$0].isSelected = false
-                            shapes[$0].shadowColor = Color.clear
+                        viewModel.shapes.indices.forEach {
+                            viewModel.shapes[$0].isSelected = false
+                            viewModel.shapes[$0].shadowColor = Color.clear
                         }
                     }
                     .padding()
@@ -64,9 +54,9 @@ struct ContentView: View {
         ColorPicker("Select Color", selection: Binding(
             get: { selectedShape.color },
             set: { newValue in
-                if let index = shapes.firstIndex(where: { $0.id == selectedShape.id }) {
-                    shapes[index].color = newValue
-                    shapes[index].shadowColor = newValue
+                if let index = viewModel.shapes.firstIndex(where: { $0.id == selectedShape.id }) {
+                    viewModel.shapes[index].color = newValue
+                    viewModel.shapes[index].shadowColor = newValue
                 }
             }
         ))
@@ -77,31 +67,31 @@ struct ContentView: View {
         Toggle("Circle", isOn: Binding(
             get: { selectedShape.shapeType == .ellipse },
             set: { newValue in
-                if let index = shapes.firstIndex(where: { $0.id == selectedShape.id }) {
+                if let index = viewModel.shapes.firstIndex(where: { $0.id == selectedShape.id }) {
                     if newValue {
-                        shapes[index].shapeType = .ellipse
+                        viewModel.shapes[index].shapeType = .ellipse
                         let shape = Shape.randomShape(
-                            at: g_tapLocation,
+                            at: viewModel.g_tapLocation,
                             shapeType: .ellipse,
-                            size: shapes[index].size,
-                            color: shapes[index].color)
-                        shapes[index] = shape
-                        shapes[index].isSelected = true
-                        shapes[index].shadowColor = shape.color
+                            size: viewModel.shapes[index].size,
+                            color: viewModel.shapes[index].color)
+                        viewModel.shapes[index] = shape
+                        viewModel.shapes[index].isSelected = true
+                        viewModel.shapes[index].shadowColor = shape.color
                         
                     } else {
-                        shapes[index].shapeType = .rectangle
+                        viewModel.shapes[index].shapeType = .rectangle
                         let shape = Shape.randomShape(
-                            at: g_tapLocation,
+                            at: viewModel.g_tapLocation,
                             shapeType: .rectangle,
-                            size: shapes[index].size,
-                            color: shapes[index].color)
-                        shapes[index] = shape
-                        shapes[index].isSelected = true
-                        shapes[index].shadowColor = shape.color
+                            size: viewModel.shapes[index].size,
+                            color: viewModel.shapes[index].color)
+                        viewModel.shapes[index] = shape
+                        viewModel.shapes[index].isSelected = true
+                        viewModel.shapes[index].shadowColor = shape.color
                     }
                 }
-                selectedShapeType = newValue ? .ellipse : .rectangle
+                viewModel.selectedShapeType = newValue ? .ellipse : .rectangle
             }
         ))
         .tint(.gray)
@@ -115,8 +105,8 @@ struct ContentView: View {
             Slider(value: Binding(
                 get: { selectedShape.size.width },
                 set: { newValue in
-                    if let index = shapes.firstIndex(where: { $0.id == selectedShape.id }) {
-                        shapes[index].size = CGSize(width: newValue, height: newValue)
+                    if let index = viewModel.shapes.firstIndex(where: { $0.id == selectedShape.id }) {
+                        viewModel.shapes[index].size = CGSize(width: newValue, height: newValue)
                     }
                 }
             ), in: 50...150, step: 1)
@@ -128,7 +118,7 @@ struct ContentView: View {
     // MARK: - Render Shapes
     func renderShapes() -> some View {
         ZStack {
-            ForEach(shapes) { shape in
+            ForEach(viewModel.shapes) { shape in
                 shape.view
                     .frame(width: shape.size.width, height: shape.size.height)
                     .position(x: shape.position.x, y: shape.position.y)
@@ -136,24 +126,24 @@ struct ContentView: View {
                     .shadow(color: shape.shadowColor, radius: 15)
                     .onTapGesture {
                         handleTap(shape: shape)
-                        g_tapLocation = shape.position
+                        viewModel.g_tapLocation = shape.position
                     }
                 
                 // MARK: Drag
                     .gesture(
                         DragGesture()
                             .onChanged({ value in
-                                if let index = shapes.firstIndex(where: { $0.id == shape.id }) {
-                                    shapes[index].position = value.location
-                                    shapes[index].isDragging = true
-                                    g_tapLocation = value.location
+                                if let index = viewModel.shapes.firstIndex(where: { $0.id == shape.id }) {
+                                    viewModel.shapes[index].position = value.location
+                                    viewModel.shapes[index].isDragging = true
+                                    viewModel.g_tapLocation = value.location
                                 }
                             })
                         
                             .onEnded({ value in
-                                if let index = shapes.firstIndex(where: { $0.id == shape.id }) {
-                                    shapes[index].isDragging = false
-                                    g_tapLocation = value.location
+                                if let index = viewModel.shapes.firstIndex(where: { $0.id == shape.id }) {
+                                    viewModel.shapes[index].isDragging = false
+                                    viewModel.g_tapLocation = value.location
                                 }
                             })
                     )
@@ -175,7 +165,7 @@ struct ContentView: View {
                 // MARK: Clear Button
                 HStack {
                     Spacer()
-                    Button(action: { shapes.removeAll() }) {
+                    Button(action: { viewModel.shapes.removeAll() }) {
                         Image(systemName: "eraser.fill")
                             .font(.title)
                             .foregroundColor(.gray)
@@ -203,20 +193,16 @@ struct ContentView: View {
     
     // MARK: - Handle Tap
     func handleTap(shape: Shape) {
-        // Deselect all shapes when a new shape is added
-        shapes.indices.forEach {
-            shapes[$0].isSelected = false
-            shapes[$0].shadowColor = Color.clear
-        }
-        if let index = shapes.firstIndex(where: { $0.id == shape.id }) {
-            if shapes[index].isSelected {
-                shapes[index].shadowColor = Color.clear
-                shapes[index].isSelected = false
+        viewModel.deselectAllShapes()
+        
+        if let index = viewModel.shapes.firstIndex(where: { $0.id == shape.id }) {
+            if viewModel.shapes[index].isSelected {
+                viewModel.shapes[index].shadowColor = Color.clear
+                viewModel.shapes[index].isSelected = false
             } else {
-                // Deselect other shapes
-                shapes.indices.forEach { shapes[$0].isSelected = false }
-                shapes[index].shadowColor = shape.color
-                shapes[index].isSelected = true
+                viewModel.deselectAllShapes()
+                viewModel.shapes[index].shadowColor = shape.color
+                viewModel.shapes[index].isSelected = true
             }
         }
     }
@@ -261,6 +247,17 @@ struct Shape: Identifiable {
     }
 }
 
+let shapeDict: [String: Any] = [
+    "isDragging": false,
+    "position": CGPoint.zero,
+    "id": UUID(),
+    "view": AnyView(Text("")),
+    "shapeType": ShapeType.ellipse,
+    "size": CGSize(width: 0, height: 0),
+    "color": Color.clear,
+    "shadowColor": Color.clear,
+    "isSelected": false
+]
 
 enum ShapeType {
     case ellipse
