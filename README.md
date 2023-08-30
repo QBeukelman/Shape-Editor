@@ -1,7 +1,5 @@
 
-# de Volksbank
-
-## Shape Editor Application SwiftUI
+# Shape Editor Application SwiftUI
 
 
 This is a Shape Editor application built using SwiftUI. The application serves as a test assignment for the iOS Developer position at de Volksbank. It allows you to add and manipulate shapes on a canvas.
@@ -67,3 +65,9 @@ The ContentView is previewed in the ContentView_Previews struct.
         }
     }
 ```
+
+<br />
+
+![alt text](https://uploads-ssl.webflow.com/60255c87f21230edfb5fa38e/64ef5ac2f7c869cffc8f57e2_Shapes_Editor_Screenshot.png)
+
+<br />
